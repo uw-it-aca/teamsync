@@ -78,7 +78,7 @@ class GitHub_DAO(DAO_BASE):
         headers.update({'Content-Type': 'application/json'})
         response = self._getDAO().postURL(url, headers, json.dumps(body))
 
-        if response.status != 200:
+        if response.status != 201:
             raise DataFailureException(url, response.status, response.data)
 
         return json.loads(response.data)
@@ -86,10 +86,8 @@ class GitHub_DAO(DAO_BASE):
     def deleteURL(self, url, headers={}):
         response = self._getDAO().deleteURL(url, headers)
 
-        if response.status != 200:
+        if response.status != 204:
             raise DataFailureException(url, response.status, response.data)
-
-        return json.loads(response.data)
 
     def _getDAO(self):
         return self._getModule('RESTCLIENTS_GITHUB_DAO_CLASS', File)

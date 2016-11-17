@@ -12,7 +12,16 @@ logger = getLogger(__name__)
 
 
 class Command(BaseCommand):
+    help = 'Reconcile GitHub teams with local groups'
+
+    def add_arguments(self, parser):
+        parser.add_argument('--commit', action='store_true', dest='commit',
+                            default=False, help='Actually update GitHub teams')
+
     def handle(self, *args, **options):
+        is_commit = options.get('commit')
+        if not is_commit:
+            print('Not committing changes to GitHub, use --commit')
 
         org_id = getattr(settings, 'GITHUB_ORGANIZATION')
 
@@ -27,11 +36,20 @@ class Command(BaseCommand):
             team_members = get_team_members(team_id)
 
             for user in [u for u in group_members if u not in team_members]:
-                add_team_membership(team_id, member)
-                logger.info('Added %s to team %s' % (user, team_id))
+                msg = 'Added %s to team %s' % (user, team_id)
+                if is_commit:
+                    add_team_membership(team_id, member)
+                    logger.info(msg)
+                else:
+                    print(msg)
 
             for user in [u for u in team_members if u not in group_members]:
-                remove_team_membership(team_id, member)
-                logger.info('Removed %s from team %s' % (user, team_id))
+                msg = 'Removed %s from team %s' % (user, team_id)
+                if is_commit:
+                    remove_team_membership(team_id, member)
+                    logger.info(msg)
+                else:
+                    print(msg)
 
-            Group.objects.update_last_sync_date(team_id)
+            if is_commit:
+                Group.objects.update_last_sync_date(team_id)
