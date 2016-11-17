@@ -3,7 +3,10 @@ from teamsync.dao.github import GitHub_DAO as github
 
 def get_members_for_org(org_id):
     url = '/orgs/%s/members' % org_id
-    return github().getURL(url)
+    members = []
+    for member in github().getURL(url):
+        members.append(member.login)
+    return members
 
 
 def get_teams_for_org(org_id):
