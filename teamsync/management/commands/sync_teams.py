@@ -1,9 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
-from django.conf import settings
 from teamsync.models import Group
 from teamsync.dao.github.organizations import (
-    get_teams_for_org, get_team_members, add_team_membership,
-    remove_team_membership)
+    get_team_members, add_team_membership, remove_team_membership)
 from teamsync.dao.groups import get_group_members
 from restclients.exceptions import DataFailureException
 from logging import getLogger
@@ -24,15 +22,8 @@ class Command(BaseCommand):
         if not is_commit:
             print('Not committing changes to GitHub, use --commit')
 
-        org_id = getattr(settings, 'GITHUB_ORGANIZATION')
-
         # Group-to-team mappings that need to be synced
         team_groups = Group.objects.get_team_lookup()
-
-        # Existing teams in GitHub
-        for team in get_teams_for_org(org_id):
-            Group.objects.filter(team_id=team.get('id')).update(
-                team_name=team.get('name'))
 
         for team_id in team_groups.keys():
             # The local membership of this team

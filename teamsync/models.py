@@ -12,7 +12,8 @@ class UserManager(models.Manager):
         lookup = cache.get_or_set(
             'group_member_lookup',
             dict((m, u) for m, u in super(UserManager, self).get_queryset(
-                ).values_list('group_member_name', 'github_username')),
+                ).exclude(group_member_name__isnull=True).values_list(
+                    'group_member_name', 'github_username')),
             60*5)
         return lookup.get(group_member_name, None)
 
@@ -21,7 +22,7 @@ class User(models.Model):
     """
     Maps local group members to github users.
     """
-    group_member_name = models.CharField(max_length=64, unique=True)
+    group_member_name = models.CharField(max_length=64, null=True, unique=True)
     github_username = models.CharField(max_length=64, unique=True)
     added_date = models.DateTimeField(auto_now_add=True)
 
@@ -34,8 +35,8 @@ class User(models.Model):
 class GroupManager(models.Manager):
     def get_team_lookup(self):
         mapping = {}
-        for g, t in super(GroupManager, self).get_queryset().values_list(
-                'group_id', 'team_id'):
+        for g, t in super(GroupManager, self).get_queryset().exclude(
+                group_id__isnull=True).values_list('group_id', 'team_id'):
             try:
                 mapping[t].append(g)
             except Exception:
@@ -53,7 +54,7 @@ class Group(models.Model):
     """
     Maps local groups to github teams.
     """
-    group_id = models.CharField(max_length=128)
+    group_id = models.CharField(max_length=128, null=True)
     team_id = models.CharField(max_length=16)
     team_name = models.CharField(max_length=128, null=True)
     added_date = models.DateTimeField(auto_now_add=True)
