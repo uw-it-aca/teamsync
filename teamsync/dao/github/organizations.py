@@ -5,7 +5,7 @@ def get_members_for_org(org_id):
     url = '/orgs/%s/members' % org_id
     members = []
     for member in github().getURL(url):
-        members.append(member.login)
+        members.append(member.get('login'))
     return members
 
 
@@ -18,7 +18,7 @@ def get_team_members(team_id):
     url = '/teams/%s/members' % team_id
     members = []
     for member in github().getURL(url):
-        members.append(member.login)
+        members.append(member.get('login'))
     return members
 
 
