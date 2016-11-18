@@ -55,7 +55,7 @@ class Group(models.Model):
     """
     group_id = models.CharField(max_length=128)
     team_id = models.CharField(max_length=16)
-    team_name = models.CharField(max_length=128)
+    team_name = models.CharField(max_length=128, null=True)
     added_date = models.DateTimeField(auto_now_add=True)
     last_sync_date = models.DateTimeField(null=True)
 
