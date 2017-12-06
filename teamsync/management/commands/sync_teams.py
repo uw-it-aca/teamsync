@@ -3,7 +3,6 @@ from teamsync.models import Group
 from teamsync.dao.github.organizations import (
     get_team_members, add_team_membership, remove_team_membership)
 from teamsync.dao.groups import get_group_members
-from restclients.exceptions import DataFailureException
 from logging import getLogger
 
 

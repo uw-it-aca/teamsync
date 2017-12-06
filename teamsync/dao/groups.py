@@ -1,4 +1,4 @@
-from restclients.gws import GWS
+from uw_gws import GWS
 from teamsync.models import User
 
 
