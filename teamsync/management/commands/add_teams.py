@@ -2,7 +2,6 @@ from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 from teamsync.dao.github.organizations import get_teams_for_org
 from teamsync.models import Group
-from restclients.exceptions import DataFailureException
 
 
 class Command(BaseCommand):

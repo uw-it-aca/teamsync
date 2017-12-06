@@ -13,12 +13,9 @@ setup(
     include_package_data=True,
     install_requires = [
         'Django==1.10.2',
-        'urllib3==1.10.2',
-        'django-userservice==1.2.1',
-        'AuthZ-Group',
-        'UW-RestClients'
+        'UW-RestClients-GWS>=0.3,<1.0'
     ],
-    license='Apache License, Version 2.0',  # example license
+    license='Apache License, Version 2.0',
     description='An application that syncs UW group memberships to GitHub teams',
     long_description=README,
     url='https://github.com/uw-it-aca/teamsync',
@@ -28,7 +25,7 @@ setup(
         'Environment :: Web Environment',
         'Framework :: Django',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: Apache Software License', # example license
+        'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
